@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2>Admin Dashboard</h2>
+        <p><a th:href="@{/admin/theatres}" class="btn">Manage Theatres</a></p>
+        <p><a th:href="@{/admin/movies}" class="btn">Manage Movies</a></p>
+        <p><a th:href="@{/admin/shows}" class="btn">Manage Shows</a></p>
+        <p><a th:href="@{/admin/reports}" class="btn">View Reports</a></p>
+    </div>
+</th:block>
+</body>
+</html>

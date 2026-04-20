@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2 th:text="${movie.title}">Movie</h2>
+        <p th:text="${movie.genre + ' | ' + movie.duration + ' mins'}"></p>
+    </div>
+    <div class="card">
+        <h3>Show Timings</h3>
+        <table th:if="${!shows.isEmpty()}">
+            <thead>
+                <tr><th>Date & Time</th><th>Price</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="s : ${shows}">
+                    <td th:text="${#temporals.format(s.showTime, 'dd-MMM-yyyy HH:mm')}"></td>
+                    <td th:text="'Rs. ' + ${s.price}"></td>
+                    <td><a th:href="@{/book/{id}(id=${s.showId})}" class="btn">Book Ticket</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${shows.isEmpty()}">No upcoming shows.</p>
+    </div>
+</th:block>
+</body>
+</html>

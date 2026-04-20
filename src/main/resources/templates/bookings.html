@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2>My Bookings</h2>
+        <table th:if="${!bookings.isEmpty()}">
+            <thead>
+                <tr><th>ID</th><th>Movie</th><th>Show Time</th><th>Seats</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="b : ${bookings}">
+                    <td th:text="${b.bookingId}"></td>
+                    <td th:text="${b.show.movie.title}"></td>
+                    <td th:text="${#temporals.format(b.show.showTime, 'dd-MMM HH:mm')}"></td>
+                    <td th:text="${#strings.listJoin(b.seats.![seatNumber], ', ')}"></td>
+                    <td th:text="${b.status}"></td>
+                    <td>
+                        <form th:if="${b.status == 'CONFIRMED'}" th:action="@{/bookings/{id}/cancel(id=${b.bookingId})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-secondary">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${bookings.isEmpty()}">No bookings yet.</p>
+    </div>
+</th:block>
+</body>
+</html>

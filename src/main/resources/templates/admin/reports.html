@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2>Sales Report</h2>
+        <form th:action="@{/admin/reports}" method="get">
+            <div class="form-group"><label>From</label><input type="date" name="from" th:value="${fromDate}"></div>
+            <div class="form-group"><label>To</label><input type="date" name="to" th:value="${toDate}"></div>
+            <button type="submit" class="btn">Generate</button>
+        </form>
+    </div>
+    <div class="card" th:if="${report}">
+        <h3>Report</h3>
+        <p th:text="'Period: ' + ${report.period}"></p>
+        <p th:text="'Total Bookings: ' + ${report.totalBookings}"></p>
+        <p th:text="'Total Revenue: Rs. ' + ${report.totalRevenue}"></p>
+    </div>
+</th:block>
+</body>
+</html>

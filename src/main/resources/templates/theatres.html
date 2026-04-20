@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2>Theatres</h2>
+        <p>Browse theatre locations and screen layouts.</p>
+    </div>
+    <div class="card" th:each="t : ${theatres}">
+        <h3 th:text="${t.name}">Theatre</h3>
+        <p th:text="'Location: ' + ${t.location}"></p>
+        <div th:if="${!t.screens.isEmpty()}">
+            <h4>Screens</h4>
+            <table>
+                <thead><tr><th>Screen</th><th>Total Seats</th></tr></thead>
+                <tbody>
+                    <tr th:each="s : ${t.screens}">
+                        <td th:text="'Screen ' + ${s.screenNumber}"></td>
+                        <td th:text="${s.totalSeats}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

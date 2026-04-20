@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2>Search Movies</h2>
+        <form th:action="@{/movies}" method="get" style="margin-bottom: 1rem;">
+            <div class="form-group" style="display: flex; gap: 0.5rem;">
+                <input type="text" name="q" th:value="${query}" placeholder="Search by title or genre">
+                <button type="submit" class="btn">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="card">
+        <h3>Movies</h3>
+        <table th:if="${!movies.isEmpty()}">
+            <thead>
+                <tr><th>Title</th><th>Genre</th><th>Duration</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="m : ${movies}">
+                    <td th:text="${m.title}"></td>
+                    <td th:text="${m.genre}"></td>
+                    <td th:text="${m.duration + ' mins'}"></td>
+                    <td><a th:href="@{/movies/{id}/shows(id=${m.movieId})}" class="btn">View Show Timings</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${movies.isEmpty()}">No movies found.</p>
+    </div>
+</th:block>
+</body>
+</html>

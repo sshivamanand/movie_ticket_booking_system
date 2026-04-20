@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h1>Movie Ticket and Cinema Management System</h1>
+        <p>Welcome! Search movies, view show timings, and book tickets.</p>
+        <p th:unless="${user}"><a th:href="@{/login}" class="btn">Login</a> or <a th:href="@{/register}" class="btn btn-secondary">Register</a> to get started.</p>
+        <p th:if="${user}"><a th:href="@{/movies}" class="btn">Browse Movies</a></p>
+    </div>
+</th:block>
+</body>
+</html>

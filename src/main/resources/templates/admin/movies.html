@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2>Add Movie</h2>
+        <form th:action="@{/admin/movies}" method="post">
+            <div class="form-group"><label>Title</label><input type="text" name="title" required></div>
+            <div class="form-group"><label>Genre</label><input type="text" name="genre" required></div>
+            <div class="form-group"><label>Duration (mins)</label><input type="number" name="duration" min="1" required></div>
+            <button type="submit" class="btn">Add Movie</button>
+        </form>
+    </div>
+    <div class="card">
+        <h3>Movies</h3>
+        <table th:if="${!movies.isEmpty()}">
+            <thead><tr><th>ID</th><th>Title</th><th>Genre</th><th>Duration</th><th>Update</th></tr></thead>
+            <tbody>
+                <tr th:each="m : ${movies}">
+                    <td th:text="${m.movieId}"></td>
+                    <td th:text="${m.title}"></td>
+                    <td th:text="${m.genre}"></td>
+                    <td th:text="${m.duration + ' mins'}"></td>
+                    <td>
+                        <form th:action="@{/admin/movies/{id}(id=${m.movieId})}" method="post" style="display:inline;">
+                            <input type="text" name="title" th:value="${m.title}" style="width:120px;">
+                            <input type="text" name="genre" th:value="${m.genre}" style="width:80px;">
+                            <input type="number" name="duration" th:value="${m.duration}" style="width:60px;">
+                            <button type="submit" class="btn btn-secondary">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${movies.isEmpty()}">No movies yet.</p>
+    </div>
+</th:block>
+</body>
+</html>

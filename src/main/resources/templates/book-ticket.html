@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<body>
+<th:block th:fragment="content">
+    <div class="card">
+        <h2 th:text="${show.movie.title}">Movie</h2>
+        <p th:text="'Show: ' + ${#temporals.format(show.showTime, 'dd-MMM-yyyy HH:mm')} + ' | Rs. ' + ${show.price} + ' per seat'"></p>
+        <p class="theatre-info" th:if="${show.screen != null and show.screen.theatre != null}">
+            <strong th:text="${show.screen.theatre.name}">Theatre</strong>
+            <span th:text="' | Screen ' + ${show.screen.screenNumber}"></span>
+            <span th:text="' | ' + ${show.screen.theatre.location}"></span>
+        </p>
+    </div>
+    <div class="card">
+        <h3>Select Seats</h3>
+        <form th:action="@{/book}" method="post" id="bookForm">
+            <input type="hidden" name="showId" th:value="${show.showId}">
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select name="paymentMethod">
+                    <option value="CARD">Card</option>
+                    <option value="UPI">UPI</option>
+                </select>
+            </div>
+            <div class="screen-layout">
+                <div class="screen-label">SCREEN</div>
+                <div class="seat-legend">
+                    <span class="legend-item"><span class="seat available"></span> Available</span>
+                    <span class="legend-item"><span class="seat booked"></span> Booked</span>
+                    <span class="legend-item"><span class="seat selected"></span> Selected</span>
+                </div>
+                <div id="seats" class="seat-grid"></div>
+            </div>
+            <div id="seatInputs"></div>
+            <button type="submit" class="btn" id="submitBtn" disabled>Confirm Booking</button>
+        </form>
+    </div>
+    <script th:inline="javascript">
+        const seats = /*[(${seatsJson})]*/ [];
+        const container = document.getElementById('seats');
+        const form = document.getElementById('bookForm');
+        const selected = new Set();
+        const seatsPerRow = 5;
+
+        seats.forEach(s => {
+            const div = document.createElement('div');
+            div.className = 'seat ' + (s.status === 'AVAILABLE' ? 'available' : 'booked');
+            div.textContent = s.seatNumber;
+            div.title = s.seatNumber + ' - ' + s.seatType + ' (' + s.status + ')';
+            div.dataset.id = s.seatId;
+            div.dataset.num = s.seatNumber;
+            if (s.status === 'AVAILABLE') {
+                div.onclick = () => {
+                    if (selected.has(s.seatNumber)) {
+                        selected.delete(s.seatNumber);
+                        div.classList.remove('selected');
+                    } else {
+                        selected.add(s.seatNumber);
+                        div.classList.add('selected');
+                    }
+                    updateForm();
+                };
+            }
+            container.appendChild(div);
+        });
+
+        function updateForm() {
+            document.getElementById('submitBtn').disabled = selected.size === 0;
+            const container = document.getElementById('seatInputs');
+            container.innerHTML = '';
+            selected.forEach(n => {
+                const inp = document.createElement('input');
+                inp.type = 'hidden';
+                inp.name = 'seatNumbers';
+                inp.value = n;
+                container.appendChild(inp);
+            });
+        }
+    </script>
+</th:block>
+</body>
+</html>
